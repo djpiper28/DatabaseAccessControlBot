@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'application'
+    id "com.github.johnrengelman.shadow" version "6.1.0"
+}
+
+group 'cards.monarch.db'
+version '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+mainClassName = 'cards.monarch.db.Main'
+
+repositories {
+    mavenCentral()
+    maven {
+        name 'm2-dv8tion'
+        url 'https://m2.dv8tion.net/releases'
+    }
+    maven { url "https://m2.chew.pro/releases" }
+}
+
+dependencies {
+    // Test modules
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.0'
+
+    // Discord bot module
+    implementation 'pw.chew:jda-chewtils:1.22.0'
+    implementation("net.dv8tion:JDA:4.3.0_333") {
+        exclude module: 'opus-java'
+    }
+
+    // Postgresql api module
+    implementation 'org.postgresql:postgresql:42.3.0'
+    implementation "com.oracle.ojdbc:ojdbc8:19.3.0.0"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+    archiveBaseName = 'cards.monarch.db'
+    archiveVersion = '0.1.0'
+}
+
+shadowJar {
+    manifest {
+        inheritFrom project.tasks.jar.manifest
+    }
+}
